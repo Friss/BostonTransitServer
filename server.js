@@ -58,7 +58,7 @@ for (var rbo in global_data.path) {
                 try {
                   jr = JSON.parse(body);
                   global_data[RBO] = jr;
-                  console.log(RBO + " Trains: " + jr.TripList.Trips.length)
+                  console.log(RBO + " Trains: " + jr.TripList.Trips.length);
                 } catch (ee) {
                   console.log("json parse error:", ee);
                 }
@@ -105,7 +105,7 @@ for (var rbo in global_data.path) {
                     parseString(body, function (err, result) {
                         global_data[RBO] = result;
 
-                        console.log("Buses: " + result.body.vehicle.length
+                        console.log("Buses: " + result.body.vehicle.length);
 
                         });
                     });
@@ -149,7 +149,9 @@ for (var rbo in global_data.path) {
 
   });
 
-  sockio.listen(8181);
+  var port = process.env.PORT || 8181;
+
+  sockio.listen(port);
 
   setInterval(function () {
     for (var cli_id in global_connect) {
