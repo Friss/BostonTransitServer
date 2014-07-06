@@ -12,9 +12,9 @@ var global_data = {
   n: 0,
   interval: {
     red: 10000,
-    blue: 13000,
-    orange: 17000,
-    bus: 12000
+    blue: 10000,
+    orange: 10000,
+    bus: 10000
   },
   port: 80,
   url: "developer.mbta.com",
@@ -104,13 +104,10 @@ for (var rbo in global_data.path) {
 
                     parseString(body, function (err, result) {
                         global_data[RBO] = result;
-
                         console.log("Buses: " + result.body.vehicle.length);
-
-                        });
                     });
                 });
-
+              });
               req.on('error', function (err) {
                 console.log("got http erro:", err);
               }); req.end();
@@ -127,15 +124,11 @@ for (var rbo in global_data.path) {
 
   sockio.on('connection', function (socket) {
     console.log("connection!");
-
     global_data.n++;
     var local_name = global_data.n;
     global_connect[local_name] = socket;
 
-    socket.on("myevent", function (msg) {
-      console.log("got myevent!");
-      console.log(msg);
-
+    socket.on("usercount", function (msg) {
       socket.emit("update", {
         n: global_data.n
       });
@@ -144,12 +137,13 @@ for (var rbo in global_data.path) {
     socket.on("disconnect", function () {
       console.log("disconnecting client ", local_name);
       delete global_connect[local_name];
-
     });
 
   });
 
   var port = process.env.PORT || 8181;
+
+  sockio.set('origins', '*:*');
 
   sockio.listen(port);
 
